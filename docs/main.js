@@ -62,7 +62,7 @@ class ThreeJSContainer {
     createScene = () => {
         this.scene = new three__WEBPACK_IMPORTED_MODULE_3__.Scene();
         const textureLoader = new three__WEBPACK_IMPORTED_MODULE_3__.TextureLoader();
-        const texture = ["love.png"]; //3種類のテクスチャを利用する
+        const texture = ["love.png"]; //テクスチャを利用する
         const clock = new three__WEBPACK_IMPORTED_MODULE_3__.Clock();
         this.cloud = [];
         this.particleVelocity = [];
@@ -112,7 +112,7 @@ class ThreeJSContainer {
             createParticles(textureload, i);
         }
         let createStageObjects = () => {
-            // 会場の壁と天井（箱状ステージ空間）
+            // 会場の壁と天井
             const roomWidth = 100;
             const roomHeight = 30;
             const roomDepth = 100;
@@ -122,30 +122,30 @@ class ThreeJSContainer {
             ceiling.rotation.x = Math.PI / 2;
             ceiling.position.y = roomHeight;
             this.scene.add(ceiling);
-            // 奥の壁（Z-）
+            // 奥の壁
             const Wall = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry(roomWidth, roomHeight), wallMaterial);
             Wall.rotation.y = Math.PI;
             Wall.position.set(0, roomHeight / 2, -roomDepth / 2);
             this.scene.add(Wall);
-            // 前の壁（Z+）
+            // 前の壁
             const frontWall = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry(roomWidth, roomHeight), wallMaterial);
             frontWall.position.set(0, roomHeight / 2, roomDepth / 2);
             this.scene.add(frontWall);
-            // 左の壁（X-）
+            // 左の壁
             const leftWall = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry(roomDepth, roomHeight), wallMaterial);
             leftWall.rotation.y = Math.PI / 2;
             leftWall.position.set(-roomWidth / 2, roomHeight / 2, 0);
             this.scene.add(leftWall);
-            // 右の壁（X+）
+            // 右の壁
             const rightWall = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry(roomDepth, roomHeight), wallMaterial);
             rightWall.rotation.y = -Math.PI / 2;
             rightWall.position.set(roomWidth / 2, roomHeight / 2, 0);
             this.scene.add(rightWall);
-            // 会場の地面（ステージの前後左右を覆う広い床）
+            // 会場の地面
             const venueFloorMat = new three__WEBPACK_IMPORTED_MODULE_3__.MeshStandardMaterial({ color: 0x111111, side: three__WEBPACK_IMPORTED_MODULE_3__.DoubleSide });
             const venueFloor = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(new three__WEBPACK_IMPORTED_MODULE_3__.PlaneGeometry(100, 100), venueFloorMat);
-            venueFloor.rotation.x = -Math.PI / 2; // 水平に
-            venueFloor.position.set(0, 0, 0); // ステージ床より少し低めに設置
+            venueFloor.rotation.x = -Math.PI / 2;
+            venueFloor.position.set(0, 0, 0);
             venueFloor.receiveShadow = true;
             this.scene.add(venueFloor);
             // ステージ床
@@ -209,7 +209,7 @@ class ThreeJSContainer {
             const stand = new three__WEBPACK_IMPORTED_MODULE_3__.Mesh(standGeometry, standMaterial);
             stand.position.y = -1;
             group.add(stand);
-            // 全体位置（ステージの中心に置くなど）
+
             group.position.set(0, floorHeight * 2, 2);
             this.scene.add(group);
         };
@@ -248,7 +248,7 @@ class ThreeJSContainer {
             const positions = new Float32Array(particleCount * 3);
             let pointsIndex = 0;
             for (let i = 0; i < particleCount; i++) {
-                // X,Zは0に固定、Yは棒の高さに均等配置
+                // x,zは0に固定、yは棒の高さに均等配置
                 positions[pointsIndex++] = 0;
                 positions[pointsIndex++] = (i / (particleCount - 1)) * height;
                 positions[pointsIndex++] = 0;
@@ -257,7 +257,7 @@ class ThreeJSContainer {
             geometry.setAttribute('position', new three__WEBPACK_IMPORTED_MODULE_3__.BufferAttribute(positions, 3));
             return geometry;
         }
-        const stickGeometry = createStickPoints(1.5, 30); // 高さ3、30点の棒状点群
+        const stickGeometry = createStickPoints(1.5, 30);
         const numCylumes = 100;
         let red = generateSprite([[0, 'rgba(255,255,255,1)'], [0.2, 'rgb(255, 0, 0)'], [0.4, 'rgb(116, 11, 11)'], [1, 'rgba(0,0,0,1)']]);
         let green = generateSprite([[0, 'rgba(255,255,255,1)'], [0.2, 'rgba(0,255,0,1)'], [0.4, 'rgb(11, 116, 46)'], [1, 'rgba(0,0,0,1)']]);
@@ -276,11 +276,10 @@ class ThreeJSContainer {
             for (let i = 0; i < 100; i++) {
                 let points = createPoints(stickGeometry, color.texture);
                 points.rotation.z = Math.PI / 2;
-                // Z位置で傾斜をつける
+               
                 const x = 20 + Math.random() * 10;
                 const y = 2 + (x - 20) * 0.8 + Math.random();
-                points.position.set(x, // 左端
-                y, -10 + Math.random() * 50);
+                points.position.set(x, y, -10 + Math.random() * 50);
                 this.scene.add(points);
                 this.cylumes.push(points);
             }
@@ -288,15 +287,15 @@ class ThreeJSContainer {
                 let points = createPoints(stickGeometry, color.texture);
                 points.rotation.z = Math.PI / 2;
                 const x = -20 - Math.random() * 10;
-                const y = 2 + (-x - 20) * 0.8 + Math.random(); // ← ここで傾斜反転
+                const y = 2 + (-x - 20) * 0.8 + Math.random();
                 points.position.set(x, y, -10 + Math.random() * 50);
                 this.scene.add(points);
                 this.cylumes.push(points);
             }
             for (let i = 0; i < 100; i++) {
                 let points = createPoints(stickGeometry, color.texture);
-                const z = 40 + Math.random() * 9; // z座標範囲修正
-                const y = 2 + (z - 40) * 0.8 + Math.random(); // 傾斜計算
+                const z = 40 + Math.random() * 9;
+                const y = 2 + (z - 40) * 0.8 + Math.random();
                 points.position.set((Math.random() * 40) - 20, y, z);
                 this.scene.add(points);
                 this.cylumes.push(points);
@@ -304,9 +303,9 @@ class ThreeJSContainer {
             for (let i = 0; i < numCylumes; i++) {
                 let points = createPoints(stickGeometry, color.texture);
                 // ランダム配置
-                points.position.set((Math.random() * 40) - 20, // X:
-                (Math.random() * -0.7) + 1, // Y: 0〜1.5（床の上）
-                (Math.random() * 30) + 7 // Z: 
+                points.position.set((Math.random() * 40) - 20,
+                (Math.random() * -0.7) + 1,
+                (Math.random() * 30) + 7  
                 );
                 this.scene.add(points);
                 this.cylumes.push(points);
